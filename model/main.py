@@ -11,9 +11,9 @@ from sklearn.neighbors import NearestNeighbors
 app = Flask(__name__)
 
 feature_list = np.array(pickle.load(
-    open('D:/ML internship/image-search-engine/main/featurevector1.pkl', 'rb')))
+    open('D:/ML internship/image-search-engine/main/model/featurevector1.pkl', 'rb')))
 filename_list = pickle.load(
-    open('D:/ML internship/image-search-engine/main/filenames1.pkl', 'rb'))
+    open('D:/ML internship/image-search-engine/main/model/filenames1.pkl', 'rb'))
 
 model = ResNet50(weights='imagenet', include_top=False,
                  input_shape=(224, 224, 3))

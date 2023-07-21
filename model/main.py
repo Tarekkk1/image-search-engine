@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import tensorflow
 from tensorflow.keras.applications.resnet50 import ResNet50, preprocess_input
 from keras.layers import GlobalMaxPool2D
@@ -8,12 +9,16 @@ from numpy.linalg import norm
 import pickle
 from sklearn.neighbors import NearestNeighbors
 
+
 app = Flask(__name__)
 
+CORS(app)
 feature_list = np.array(pickle.load(
     open('D:/ML internship/image-search-engine/main/model/featurevector1.pkl', 'rb')))
 filename_list = pickle.load(
     open('D:/ML internship/image-search-engine/main/model/filenames1.pkl', 'rb'))
+print(filename_list)
+
 
 model = ResNet50(weights='imagenet', include_top=False,
                  input_shape=(224, 224, 3))
@@ -55,4 +60,4 @@ def search_image():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=8080)

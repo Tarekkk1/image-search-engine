@@ -1,46 +1,68 @@
 import { useState } from 'react';
 import axios from 'axios';
 
-function ImageUploadComponent() {
+import Image from 'next/image';
+const ImageUploadComponent = () => {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [imagePaths, setImagePaths] = useState<string[]>([]);
 
     const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0] || null;
         setSelectedFile(file);
-        if (file) {
-            const reader = new FileReader();
+    };
 
-            reader.onload = async () => {
-                try {
-                    const base64Image = reader.result?.toString() || '';
+    const callApi = async () => {
+        if (!selectedFile) return;
 
-                    const response = await axios.post('http://127.0.0.1:5000/search', { image: base64Image });
+        const formData = new FormData();
+        formData.append('image', selectedFile);
 
-                    if (response.status === 200) {
-                        console.log('API Response:', response.data);
-                    } else {
-                        console.error('API Call failed with status:', response.status);
-                    }
-                } catch (error) {
-                    console.error('Error occurred during API call:', error);
-                }
-            };
+        try {
+            const response = await axios.post('http://127.0.0.1:8080/search', formData);
 
-            reader.readAsDataURL(file);
+            if (response.status === 200) {
+                console.log('API Response:', response.data);
+                setImagePaths(response.data); // Save the image paths in state
+            } else {
+                console.error('API Call failed with status:', response.status);
+            }
+        } catch (error) {
+            console.error('Error occurred during API call:', error);
         }
     };
+    const basicPath = '/';
 
     return (
         <div className="flex flex-col justify-center items-center h-screen">
             <label
                 htmlFor="imageUpload"
-                className="w-48 px-4 py-2 mb-72 text-white bg-slate-800 rounded-md cursor-pointer"
+                className="w-48 px-4   text-white bg-slate-800 rounded-md cursor-pointer"
             >
                 Upload Image
             </label>
-            <input id="imageUpload" type="file" className="hidden" onChange={handleImageUpload} />
+            <input
+                id="imageUpload"
+                type="file"
+                className="hidden"
+                onChange={(event) => {
+                    handleImageUpload(event);
+                    callApi();
+                }}
+            />
+            {imagePaths.length > 0 && (
+                <div className=" mx-20 ">
+                    <h2 className="text-xl font-bold">Images</h2>
+                    <div className="flex gap-1">
+                        {imagePaths.map((path, index) => (
+                            <Image key={index} src={`${basicPath}${path}`} alt=""
+                                width={300}
+                                height={200} />
+                        ))}
+                    </div>
+                </div>
+            )}
         </div>
     );
-}
+};
 
 export default ImageUploadComponent;

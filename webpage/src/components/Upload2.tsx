@@ -38,31 +38,31 @@ const ImageUploadComponent = () => {
 
     const basicPath = '/';
 
-    return (
-        <div className="flex flex-col justify-center items-center h-screen">
-            <label
-                htmlFor="imageUpload"
-                className="w-48 px-4 text-white bg-slate-800 rounded-md cursor-pointer"
-            >
-                Upload Image
-            </label>
-            <input
-                id="imageUpload"
-                type="file"
-                className="hidden"
-                onChange={handleImageUpload}
-            />
-            {imagePaths.length > 0 && (
-                <div className="mx-20">
-                    <h2 className="text-xl font-bold">Images</h2>
-                    <div className="flex gap-1">
-                        {imagePaths.map((path, index) => (
-                            <Image key={index} src={`${basicPath}${path}`} alt="" width={300} height={200} />
-                        ))}
-                    </div>
+    return (<div className="flex flex-col justify-center items-center " >
+
+        <label
+            htmlFor="imageUpload"
+            className="w-48 px-4 m-5 text-white bg-slate-800 rounded-md cursor-pointer"
+        >
+            Upload Image
+        </label>
+        <input
+            id="imageUpload"
+            type="file"
+            className="hidden"
+            onChange={handleImageUpload}
+        />
+        {imagePaths.length > 0 && (
+            <div className="mx-20">
+                <h2 className="text-xl font-bold">Images</h2>
+                <div className="flex flex-wrap gap-1">
+                    {imagePaths.map((path, index) => (
+                        <Image key={index} src={`${basicPath}${path}`} alt="" width={200} height={200} />
+                    ))}
                 </div>
-            )}
-        </div>
+            </div>
+        )}
+    </div>
     );
 };
 

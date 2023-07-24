@@ -6,7 +6,7 @@ import Navbar from '../components/Navbar';
 import UploadComponent from '../components/Upload2';
 export default function Home() {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col min-h-screen">
       <Navbar />
       <UploadComponent />
 
